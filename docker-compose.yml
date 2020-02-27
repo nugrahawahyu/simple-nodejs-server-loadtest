@@ -39,6 +39,25 @@ services:
           cpus: '0.2'
           memory: 250M
 
+  server-cluster:
+    build:
+      context: ./server-cluster
+      dockerfile: Dockerfile
+    container_name: server-cluster
+    restart: unless-stopped
+    ports:
+      - "3007:3007"
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'
+          memory: 500M
+        reservations:
+          cpus: '0.2'
+          memory: 250M
+
   api:
     build:
       context: ./api
@@ -76,6 +95,7 @@ services:
       - redis
       - server-normal
       - server-infinity
+      - server-cluster
       - api
 
   redis:
