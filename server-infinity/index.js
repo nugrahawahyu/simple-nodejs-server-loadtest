@@ -24,6 +24,10 @@ app.get('/', function (req, res) {
       res.send('Hello World')
     })
 })
+
+app.get('/plain-text', function (req, res) {
+  res.send('Hello World')
+})
  
 app.use(function (err, req, res, next) {
   console.error(err.stack)

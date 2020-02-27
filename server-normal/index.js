@@ -15,6 +15,10 @@ app.get('/', function (req, res) {
     })
 })
 
+app.get('/plain-text', function (req, res) {
+  res.send('Hello World')
+})
+
 // app.get('/', async function (req, res) {
 //   try {
 //     await axios.get('http://api:3004')
