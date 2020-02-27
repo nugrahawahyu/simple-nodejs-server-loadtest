@@ -10,6 +10,8 @@ WORKDIR /app
 
 COPY . ./
 
+RUN yarn
+
 EXPOSE 3006
 
 ENTRYPOINT ["npm", "start"]
