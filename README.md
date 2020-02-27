@@ -1,5 +1,6 @@
 # Setup
 - npm install -g loadtest
+- docker-compose up --build
 
 # Servers
 - localhost:3005 (server-normal)
