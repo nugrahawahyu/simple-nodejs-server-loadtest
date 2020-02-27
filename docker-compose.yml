@@ -1,0 +1,89 @@
+version: '3'
+
+services:
+  server-normal:
+    build:
+      context: ./server-normal
+      dockerfile: Dockerfile
+    container_name: server-normal
+    restart: unless-stopped
+    ports:
+      - "3005:3005"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'
+          memory: 500M
+        reservations:
+          cpus: '0.2'
+          memory: 250M
+    networks:
+      - app-network
+
+  server-infinity:
+    build:
+      context: ./server-infinity
+      dockerfile: Dockerfile
+    container_name: server-infinity
+    restart: unless-stopped
+    ports:
+      - "3006:3006"
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'
+          memory: 500M
+        reservations:
+          cpus: '0.2'
+          memory: 250M
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: api
+    restart: unless-stopped
+    ports:
+      - "3004:3004"
+    networks:
+      - app-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - cadvisor
+
+  cadvisor:
+    image: google/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - 8080:8080
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    depends_on:
+      - redis
+      - server-normal
+      - server-infinity
+      - api
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - 6379:6379
+
+networks:
+  app-network:
+    driver: bridge
