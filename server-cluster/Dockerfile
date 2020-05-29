@@ -1,7 +1,4 @@
-FROM node:9-alpine
-
-RUN apk update && apk upgrade && \
-  apk add --no-cache git
+FROM node:10.19.0-alpine
 
 ENV NODE_ENV production
 
@@ -12,6 +9,6 @@ COPY . ./
 
 RUN yarn
 
-EXPOSE 3005
+EXPOSE 3007
 
 ENTRYPOINT ["npm", "start"]

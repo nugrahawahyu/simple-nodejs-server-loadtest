@@ -9,6 +9,6 @@ COPY . ./
 
 RUN yarn
 
-EXPOSE 3006
+EXPOSE 3010
 
 ENTRYPOINT ["npm", "start"]

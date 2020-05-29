@@ -10,14 +10,11 @@ const zlib = require('zlib');
 const createError = require('axios/lib/core/createError');
 const enhanceError = require('axios/lib/core/enhanceError');
 
-const { jsonLogger } = require('@bukalapak/middleware-logging').loggers;
-
 /* eslint consistent-return:0 */
 module.exports = function httpAdapter(config) {
   return new Promise(function dispatchHttpRequest(resolve, reject) {
     const { headers } = config;
     let { data } = config;
-    let timer;
 
     // Set User-Agent (required by some servers)
     // Only set header if it hasn't been set in config
@@ -144,13 +141,6 @@ module.exports = function httpAdapter(config) {
     const req = transport.request(options, function handleResponse(res) {
       if (req.aborted) return;
 
-      // Response has been received so kill timer that handles request timeout
-      clearTimeout(timer);
-      timer = null;
-
-      // log header before modified
-      jsonLogger.info('fragment-headers-unmodified', { headers: res.headers });
-
       // uncompress the response body transparently if required
       let stream = res;
       switch (res.headers['content-encoding']) {
@@ -218,11 +208,11 @@ module.exports = function httpAdapter(config) {
     });
 
     // Handle request timeout
-    if (config.timeout && !timer) {
-      timer = setTimeout(function handleRequestTimeout() {
+    if (config.timeout) {
+      req.setTimeout(config.timeout, function handleRequestTimeout() {
         req.abort();
         reject(createError(`timeout of ${config.timeout}ms exceeded`, config, 'ECONNABORTED', req));
-      }, config.timeout);
+      });
     }
 
     if (config.cancelToken) {

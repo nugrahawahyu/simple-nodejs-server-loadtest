@@ -11,6 +11,21 @@ services:
       context: ./server-alternate
       dockerfile: Dockerfile
 
+  server-alternate-custom-adapter:
+    build:
+      context: ./server-alternate-custom-adapter
+      dockerfile: Dockerfile
+
+  server-ky:
+    build:
+      context: ./server-ky
+      dockerfile: Dockerfile
+
+  server-hapi-wreck:
+    build:
+      context: ./server-hapi-wreck
+      dockerfile: Dockerfile
+    
   server-cluster:
     build:
       context: ./server-cluster

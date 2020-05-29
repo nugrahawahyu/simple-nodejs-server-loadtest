@@ -9,11 +9,11 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2'
-          memory: 1500M
+          cpus: '0.3'
+          memory: 750M
         reservations:
-          cpus: '2'
-          memory: 1250M
+          cpus: '0.2'
+          memory: 500M
     networks:
       - app-network
 
@@ -28,10 +28,58 @@ services:
       resources:
         limits:
           cpus: '0.3'
-          memory: 1500M
+          memory: 750M
         reservations:
           cpus: '0.2'
-          memory: 1250M
+          memory: 500M
+
+  server-alternate-custom-adapter:
+    image: test-socket_server-alternate-custom-adapter:latest
+    restart: unless-stopped
+    ports:
+      - "3008:3008"
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'
+          memory: 750M
+        reservations:
+          cpus: '0.2'
+          memory: 500M
+
+  server-ky:
+    image: test-socket_server-ky:latest
+    restart: unless-stopped
+    ports:
+      - "3009:3009"
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'
+          memory: 750M
+        reservations:
+          cpus: '0.2'
+          memory: 500M
+
+  server-hapi-wreck:
+    image: test-socket_server-hapi-wreck:latest
+    restart: unless-stopped
+    ports:
+      - "3010:3010"
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'
+          memory: 750M
+        reservations:
+          cpus: '0.2'
+          memory: 500M
 
   server-cluster:
     image: test-socket_server-cluster:latest
@@ -44,10 +92,10 @@ services:
       resources:
         limits:
           cpus: '2'
-          memory: 1500M
+          memory: 750M
         reservations:
           cpus: '2'
-          memory: 1250M
+          memory: 500M
 
   api:
     image: test-socket_api:latest

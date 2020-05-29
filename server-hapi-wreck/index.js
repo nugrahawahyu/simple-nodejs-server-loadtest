@@ -1,18 +1,11 @@
-const axios = require('axios')
 const express = require('express')
 const app = express()
-
-const httpAdapter = require('./adapter');
-
-const client = axios.create({
-  timeout: 10000,
-  adapter: httpAdapter
-})
+const Wreck = require('@hapi/wreck');
 
 app.get('/', async function (req, res, next) {
   try {
-    await client.get('http://api:3004')
-    res.send('hello from server alternate-custom-adapter')
+    await Wreck.get('http://api:3004');
+    res.send('hello from server hapi-wreck')
   } catch (e) {
     next(e)
   }
@@ -27,4 +20,4 @@ app.use(function (err, req, res, next) {
   res.status(500).send('Something broke!')
 })
 
-app.listen(3008)
+app.listen(3010)

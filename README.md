@@ -13,7 +13,7 @@
 # Loadtest Example
 
 ```
-loadtest --rps 400 -n 20000 http://localhost:3006
+loadtest -c 200 -n 2000  http://localhost:3005
 ```
 
 # Container Monitoring
