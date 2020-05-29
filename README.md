@@ -1,10 +1,14 @@
 # Setup
 - npm install -g loadtest
-- docker-compose up --build
+- docker-compose -f docker-compose-builder.yml build
+- docker stack deploy --compose-file docker-compose.yml simple-server-loadtest
+
+# Clean Up
+- docker stack down simple-server-loadtest
 
 # Servers
 - localhost:3005 (server-normal)
-- localhost:3006 (server-infinity)
+- localhost:3006 (server-alternate)
 
 # Loadtest Example
 
