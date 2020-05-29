@@ -1,30 +1,24 @@
-version: '3'
+version: '3.8'
 
 services:
   server-normal:
-    build:
-      context: ./server-normal
-      dockerfile: Dockerfile
-    container_name: server-normal
+    image: test-socket_server-normal:latest
     restart: unless-stopped
     ports:
       - "3005:3005"
     deploy:
       resources:
         limits:
-          cpus: '0.3'
-          memory: 500M
+          cpus: '2'
+          memory: 1500M
         reservations:
-          cpus: '0.2'
-          memory: 250M
+          cpus: '2'
+          memory: 1250M
     networks:
       - app-network
 
-  server-infinity:
-    build:
-      context: ./server-infinity
-      dockerfile: Dockerfile
-    container_name: server-infinity
+  server-alternate:
+    image: test-socket_server-alternate:latest
     restart: unless-stopped
     ports:
       - "3006:3006"
@@ -34,16 +28,13 @@ services:
       resources:
         limits:
           cpus: '0.3'
-          memory: 500M
+          memory: 1500M
         reservations:
           cpus: '0.2'
-          memory: 250M
+          memory: 1250M
 
   server-cluster:
-    build:
-      context: ./server-cluster
-      dockerfile: Dockerfile
-    container_name: server-cluster
+    image: test-socket_server-cluster:latest
     restart: unless-stopped
     ports:
       - "3007:3007"
@@ -52,26 +43,26 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.3'
-          memory: 500M
+          cpus: '2'
+          memory: 1500M
         reservations:
-          cpus: '0.2'
-          memory: 250M
+          cpus: '2'
+          memory: 1250M
 
   api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile
-    container_name: api
+    image: test-socket_api:latest
     restart: unless-stopped
     ports:
       - "3004:3004"
     networks:
       - app-network
+    deploy:
+      mode: replicated
+      replicas: 20
+      endpoint_mode: vip
 
   prometheus:
     image: prom/prometheus:latest
-    container_name: prometheus
     ports:
       - 9090:9090
     command:
@@ -83,7 +74,6 @@ services:
 
   cadvisor:
     image: google/cadvisor:latest
-    container_name: cadvisor
     ports:
       - 8080:8080
     volumes:
@@ -94,7 +84,7 @@ services:
     depends_on:
       - redis
       - server-normal
-      - server-infinity
+      - server-alternate
       - server-cluster
       - api
 
@@ -106,4 +96,4 @@ services:
 
 networks:
   app-network:
-    driver: bridge
+    driver: overlay

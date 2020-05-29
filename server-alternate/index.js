@@ -12,7 +12,7 @@ const client = axios.create({
 app.get('/', async function (req, res, next) {
   try {
     await client.get('http://api:3004')
-    res.send('hello from server normal')
+    res.send('hello from server alternate')
   } catch (e) {
     next(e)
   }
@@ -27,4 +27,4 @@ app.use(function (err, req, res, next) {
   res.status(500).send('Something broke!')
 })
 
-app.listen(3005)
+app.listen(3006)

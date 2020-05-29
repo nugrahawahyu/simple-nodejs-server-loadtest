@@ -1,27 +1,27 @@
 const axios = require('axios')
 const express = require('express')
 const app = express()
-const morgan = require('morgan')
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 
+const client = axios.create({
+  timeout: 10000
+})
+
 function runServer () {
-  app.use(morgan('combined'))
-  
-  app.get('/', function (req, res) {
-    axios.get('http://api:3004')
-      .catch((e) => {
-        res.status(500).send('error')
-      })
-      .then((data) => {
-        res.send('Hello World')
-      })
+  app.get('/', async function (req, res, next) {
+    try {
+      await client.get('http://api:3004')
+      res.send('hello from server cluster')
+    } catch (e) {
+      next(e)
+    }
   })
   
   app.get('/plain-text', function (req, res) {
     res.send('Hello World')
   })
-   
+  
   app.use(function (err, req, res, next) {
     console.error(err.stack)
     res.status(500).send('Something broke!')

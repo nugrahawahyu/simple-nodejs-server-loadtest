@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  server-normal:
+    build:
+      context: ./server-normal
+      dockerfile: Dockerfile
+
+  server-alternate:
+    build:
+      context: ./server-alternate
+      dockerfile: Dockerfile
+
+  server-cluster:
+    build:
+      context: ./server-cluster
+      dockerfile: Dockerfile
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
