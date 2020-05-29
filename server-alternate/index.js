@@ -1,9 +1,6 @@
 const axios = require('axios')
 const express = require('express')
 const app = express()
-const morgan = require('morgan')
-
-// app.use(morgan('combined'))
 
 const client = axios.create({
   timeout: 10000
